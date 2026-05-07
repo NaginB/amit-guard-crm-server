@@ -13,7 +13,7 @@ const guardPayload = yup.object({
     .required("Date of birth is required")
     .test(
       "age",
-      "Age must be between 22 and 50 years",
+      "Age must be between 20 and 50 years",
       function (value) {
         if (!value) return false;
         const today = new Date();
@@ -23,7 +23,7 @@ const guardPayload = yup.object({
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
           age--;
         }
-        return age >= 22 && age <= 50;
+        return age >= 20 && age <= 50;
       }
     ),
   gender: yup
@@ -104,7 +104,7 @@ export const updateGuardSchema = yup.object({
     .optional()
     .test(
       "age",
-      "Age must be between 22 and 50 years",
+      "Age must be between 20 and 50 years",
       function (value) {
         if (!value) return true;
         const today = new Date();
@@ -114,7 +114,7 @@ export const updateGuardSchema = yup.object({
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
           age--;
         }
-        return age >= 22 && age <= 50;
+        return age >= 20 && age <= 50;
       }
     ),
   gender: yup.string().oneOf(["Male", "Female", "Other"]).optional(),
