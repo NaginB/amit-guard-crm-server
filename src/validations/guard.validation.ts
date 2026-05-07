@@ -8,7 +8,24 @@ const guardPayload = yup.object({
     .string()
     .oneOf(Object.values(Designation), "Invalid designation")
     .required("Designation is required"),
-  dateOfBirth: yup.date().required("Date of birth is required"),
+  dateOfBirth: yup
+    .date()
+    .required("Date of birth is required")
+    .test(
+      "age",
+      "Age must be between 22 and 50 years",
+      function (value) {
+        if (!value) return false;
+        const today = new Date();
+        const birthDate = new Date(value);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age >= 22 && age <= 50;
+      }
+    ),
   gender: yup
     .string()
     .oneOf(["Male", "Female", "Other"], "Invalid gender")
@@ -18,11 +35,11 @@ const guardPayload = yup.object({
   email: yup.string().email("Must be a valid email").optional(),
   presentAddress: yup.string().required("Present address is required"),
   permanentAddress: yup.string().required("Permanent address is required"),
-  bankName: yup.string().required("Bank name is required"),
-  accountNumber: yup.string().required("Account number is required"),
-  ifscCode: yup.string().required("IFSC code is required"),
-  branchName: yup.string().required("Branch name is required"),
-  salary: yup.number().required("Salary is required"),
+  bankName: yup.string().optional(),
+  accountNumber: yup.string().optional(),
+  ifscCode: yup.string().optional(),
+  branchName: yup.string().optional(),
+  salary: yup.number().optional(),
   aadharNumber: yup
     .string()
     .matches(
@@ -32,8 +49,9 @@ const guardPayload = yup.object({
     .required("Aadhaar number is required"),
   panNumber: yup
     .string()
+    .transform((val) => (val === "" ? undefined : val))
     .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i, "Invalid PAN format")
-    .required("PAN number is required"),
+    .optional(),
   photo: yup.string().url().optional(),
   photoPublicId: yup.string().optional(),
   fatherName: yup.string().required("Father name is required"),
@@ -71,7 +89,24 @@ export const updateGuardSchema = yup.object({
     .string()
     .oneOf(Object.values(Designation), "Invalid designation")
     .optional(),
-  dateOfBirth: yup.date().optional(),
+  dateOfBirth: yup
+    .date()
+    .optional()
+    .test(
+      "age",
+      "Age must be between 22 and 50 years",
+      function (value) {
+        if (!value) return true;
+        const today = new Date();
+        const birthDate = new Date(value);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age >= 22 && age <= 50;
+      }
+    ),
   gender: yup.string().oneOf(["Male", "Female", "Other"]).optional(),
   contactNumber: yup.string().optional(),
   alternateContactNumber: yup.string().optional(),
@@ -92,6 +127,7 @@ export const updateGuardSchema = yup.object({
     .optional(),
   panNumber: yup
     .string()
+    .transform((val) => (val === "" ? undefined : val))
     .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i, "Invalid PAN format")
     .optional(),
   photo: yup.string().url().optional(),
