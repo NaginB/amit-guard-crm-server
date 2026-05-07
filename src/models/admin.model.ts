@@ -19,7 +19,7 @@ const adminSchema = new Schema<IAdmin>(
     },
     role: {
       type: String,
-      enum: ["admin"],
+      enum: ["admin", "employee"],
       default: "admin",
     },
   },

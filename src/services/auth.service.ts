@@ -38,9 +38,9 @@ export const login = async (email: string, password: any) => {
       expiresIn: expiresIn as unknown as SignOptions["expiresIn"],
     } as SignOptions;
 
-    const token = jwt.sign({ id: admin._id }, secret, options);
+    const token = jwt.sign({ id: admin._id, role: admin.role }, secret, options);
 
-    return { success: true, token };
+    return { success: true, token, role: admin.role };
   } catch (error: any) {
     return {
       success: false,

@@ -110,6 +110,8 @@ guardSchema.index({ contactNumber: 1 });
 
 // Handle guardId auto-increment and password hashing
 guardSchema.pre("save", async function (next) {
+
+  console.log('response: -------')
   // Hash password if it's modified
   if (this.isModified("password") && this.password) {
     this.password = await bcrypt.hash(this.password, 12);

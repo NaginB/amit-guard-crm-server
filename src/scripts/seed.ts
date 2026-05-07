@@ -10,14 +10,19 @@ const seedAdmin = async () => {
     await mongoose.connect(process.env.MONGO_URI!);
 
     await Admin.deleteMany({});
-    const adminExists = await Admin.findOne({ email: "admin@gmail.com" });
 
-    if (!adminExists) {
-      await Admin.create({
-        email: "admin@gmail.com",
+    await Admin.create([
+      {
+        email: "amit.parekh@eagleeyesecurity.com",
         password: "Admin@2204",
-      });
-    }
+        role: "admin",
+      },
+      {
+        email: "employee@eagleeyesecurity.com",
+        password: "Emp@2204",
+        role: "employee",
+      }
+    ]);
   } catch (error) {
     console.error("Error seeding admin user:", error);
   }
@@ -30,7 +35,7 @@ const seedGuards = async () => {
     // Clear existing guards
     await Guard.deleteMany({});
 
-    const sampleGuards = [
+    let sampleGuards = [
       {
         firstName: "John",
         lastName: "Smith",
@@ -54,6 +59,7 @@ const seedGuards = async () => {
         emergencyContactNumber: "+1-555-987-6543",
         emergencyContactRelation: "Spouse",
         joiningDate: new Date("2023-01-15"),
+        designation: "Guard",
       },
       {
         firstName: "Sarah",
@@ -78,6 +84,7 @@ const seedGuards = async () => {
         emergencyContactNumber: "+1-555-876-5432",
         emergencyContactRelation: "Spouse",
         joiningDate: new Date("2022-08-20"),
+        designation: "Guard",
       },
       {
         firstName: "Mike",
@@ -101,6 +108,7 @@ const seedGuards = async () => {
         emergencyContactNumber: "+1-555-765-4321",
         emergencyContactRelation: "Spouse",
         joiningDate: new Date("2023-03-10"),
+        designation: "Guard",
       },
       {
         firstName: "Emily",
@@ -124,6 +132,7 @@ const seedGuards = async () => {
         emergencyContactNumber: "+1-555-654-3210",
         emergencyContactRelation: "Brother",
         joiningDate: new Date("2023-06-05"),
+        designation: "Guard",
       },
       {
         firstName: "David",
@@ -147,8 +156,14 @@ const seedGuards = async () => {
         emergencyContactNumber: "+1-555-543-2109",
         emergencyContactRelation: "Sister",
         joiningDate: new Date("2022-11-12"),
+        designation: "Guard",
       },
     ];
+
+    sampleGuards = sampleGuards.map((guard, i) => ({
+      ...guard,
+      guardId: i + 1
+    }))
 
     await Guard.insertMany(sampleGuards);
   } catch (error) {
@@ -159,7 +174,7 @@ const seedGuards = async () => {
 const seedAll = async () => {
   try {
     await seedAdmin();
-    await seedGuards();
+    //  await seedGuards();
   } catch (error) {
     console.error("Error during seeding:", error);
   } finally {
