@@ -26,6 +26,8 @@ export interface IGuard extends Document {
   accountNumber?: string;
   ifscCode?: string;
   branchName?: string;
+  bankProof?: string;
+  bankProofPublicId?: string;
 
   // Salary & Payment Records
   salary?: number;
@@ -35,6 +37,14 @@ export interface IGuard extends Document {
   panNumber?: string;
   photo?: string; // URL to the image
   photoPublicId?: string; // Cloudinary public ID for deletion
+  aadharCardFront?: string;
+  aadharCardFrontPublicId?: string;
+  aadharCardBack?: string;
+  aadharCardBackPublicId?: string;
+  panCardFront?: string;
+  panCardFrontPublicId?: string;
+  panCardBack?: string;
+  panCardBackPublicId?: string;
 
   // Family Details and Emergency Contacts
   fatherName?: string;

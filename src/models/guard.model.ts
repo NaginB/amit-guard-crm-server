@@ -40,6 +40,8 @@ const guardSchema = new Schema<IGuard>(
     accountNumber: { type: String, trim: true },
     ifscCode: { type: String, trim: true },
     branchName: { type: String, trim: true },
+    bankProof: { type: String },
+    bankProofPublicId: { type: String, trim: true },
 
     // Salary & Payment Records
     salary: { type: Number },
@@ -49,6 +51,14 @@ const guardSchema = new Schema<IGuard>(
     panNumber: { type: String, trim: true, unique: true, sparse: true },
     photo: { type: String },
     photoPublicId: { type: String, trim: true },
+    aadharCardFront: { type: String },
+    aadharCardFrontPublicId: { type: String, trim: true },
+    aadharCardBack: { type: String },
+    aadharCardBackPublicId: { type: String, trim: true },
+    panCardFront: { type: String },
+    panCardFrontPublicId: { type: String, trim: true },
+    panCardBack: { type: String },
+    panCardBackPublicId: { type: String, trim: true },
 
     // Family Details and Emergency Contacts
     fatherName: { type: String, trim: true },
