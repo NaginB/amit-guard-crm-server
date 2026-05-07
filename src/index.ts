@@ -11,6 +11,7 @@ import attendanceRoutes from "./routes/attendance.routes";
 import weeklyOffRoutes from "./routes/weeklyOff.routes";
 import salarySlipRoutes from "./routes/salarySlip.routes";
 import billRoutes from "./routes/bill.routes";
+import quickBillRoutes from "./routes/quickBill.routes";
 import { errorHandler } from "./middleware/errorHandler";
 
 const app: Express = express();
@@ -42,6 +43,7 @@ app.use("/api/v1/upload", uploadRoutes);
 // app.use("/api/v1/weekly-off", weeklyOffRoutes);
 // app.use("/api/v1/salary-slip", salarySlipRoutes);
 // app.use("/api/v1/bills", billRoutes);
+app.use("/api/v1/quick-bills", quickBillRoutes);
 
 app.use(errorHandler);
 

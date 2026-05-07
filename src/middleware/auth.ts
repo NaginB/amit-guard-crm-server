@@ -52,11 +52,23 @@ export const protect = async (
         );
       }
       // GRANT ACCESS TO PROTECTED ROUTE
-      // req.user = currentUser;
+      (req as any).user = currentUser;
     }
 
     next();
   } catch (error) {
     return next(new AppError("Invalid token. Please log in again.", 401));
   }
+};
+
+export const restrictTo = (...roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const userRole = (req as any).user?.role;
+    if (!userRole || !roles.includes(userRole)) {
+      return next(
+        new AppError("You do not have permission to perform this action", 403)
+      );
+    }
+    next();
+  };
 };
