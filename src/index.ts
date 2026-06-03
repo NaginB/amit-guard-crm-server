@@ -15,7 +15,7 @@ import quickBillRoutes from "./routes/quickBill.routes";
 import { errorHandler } from "./middleware/errorHandler";
 
 const app: Express = express();
-const port = 3000;
+const PORT = process.env.PORT || 5000;
 
 // CORS configuration
 app.use(
@@ -49,6 +49,6 @@ app.use(errorHandler);
 
 connectDB();
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`[server]: Server is running at http://localhost:${PORT}`);
 });
