@@ -6,14 +6,14 @@ import ResponseHandler from "../utils/responseHandler";
 export const createGuardHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { guard, password } = await guardService.createGuard(req.body);
     ResponseHandler.created(
       res,
       { guard, password },
-      "Guard created successfully"
+      "Guard created successfully",
     );
   } catch (error) {
     next(error);
@@ -23,14 +23,14 @@ export const createGuardHandler = async (
 export const getAllGuardsHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const guards = await guardService.getAllGuards();
     ResponseHandler.success(
       res,
       { guards, results: guards.length },
-      "Guards retrieved successfully"
+      "Guards retrieved successfully",
     );
   } catch (error) {
     next(error);
@@ -40,7 +40,7 @@ export const getAllGuardsHandler = async (
 export const getGuardHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const guard = await guardService.getGuardById(req.params.guardId!);
@@ -56,12 +56,12 @@ export const getGuardHandler = async (
 export const updateGuardHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const guard = await guardService.updateGuardById(
       req.params.guardId!,
-      req.body
+      req.body,
     );
     ResponseHandler.success(res, { guard }, "Guard updated successfully");
   } catch (error) {
@@ -72,7 +72,7 @@ export const updateGuardHandler = async (
 export const deleteGuardHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     await guardService.deleteGuardById(req.params.guardId!);
