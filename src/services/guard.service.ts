@@ -28,22 +28,29 @@ export const createGuard = async (
     const duplicate = await Guard.findOne({
       isDeleted: false,
       $or: [
-        guardData.contactNumber
-          ? { contactNumber: guardData.contactNumber }
-          : undefined,
-        guardData.email ? { email: guardData.email } : undefined,
-        guardData.aadharNumber
-          ? { aadharNumber: guardData.aadharNumber }
-          : undefined,
-        guardData.panNumber ? { panNumber: guardData.panNumber } : undefined,
-      ].filter(Boolean) as any,
+        { contactNumber: guardData.contactNumber },
+        { aadharNumber: guardData.aadharNumber },
+        ...(guardData.email ? [{ email: guardData.email }] : []),
+        ...(guardData.panNumber ? [{ panNumber: guardData.panNumber }] : []),
+      ],
     }).lean();
 
     if (duplicate) {
-      throw new AppError(
-        "A guard with provided contact/email/Aadhar/PAN already exists",
-        409,
-      );
+      if (duplicate.contactNumber === guardData.contactNumber) {
+        throw new AppError("Phone number already exists", 409);
+      }
+
+      if (duplicate.aadharNumber === guardData.aadharNumber) {
+        throw new AppError("Aadhar number already exists", 409);
+      }
+
+      if (guardData.email && duplicate.email === guardData.email) {
+        throw new AppError("Email already exists", 409);
+      }
+
+      if (guardData.panNumber && duplicate.panNumber === guardData.panNumber) {
+        throw new AppError("PAN number already exists", 409);
+      }
     }
 
     // Generate auto password if not provided

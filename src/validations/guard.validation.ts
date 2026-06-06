@@ -1,6 +1,18 @@
 import * as yup from "yup";
 import { Designation } from "../constants/designation.constants";
 
+const panNumberSchema = yup
+  .string()
+  .transform((val) => (val === "" ? undefined : val))
+  .length(10, "PAN must be 10 characters")
+  .optional();
+
+const emailSchema = yup
+  .string()
+  .transform((val) => (val === "" ? undefined : val))
+  .email("Must be a valid email")
+  .optional();
+
 const guardPayload = yup.object({
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
@@ -32,7 +44,7 @@ const guardPayload = yup.object({
     .required("Gender is required"),
   contactNumber: yup.string().required("Contact number is required"),
   alternateContactNumber: yup.string().optional(),
-  email: yup.string().email("Must be a valid email").optional(),
+  email: emailSchema,
   presentAddress: yup.string().required("Present address is required"),
   permanentAddress: yup.string().required("Permanent address is required"),
   bankName: yup.string().optional(),
@@ -47,11 +59,7 @@ const guardPayload = yup.object({
       "Aadhaar must be 12 digits"
     )
     .required("Aadhaar number is required"),
-  panNumber: yup
-    .string()
-    .transform((val) => (val === "" ? undefined : val))
-    .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i, "Invalid PAN format")
-    .optional(),
+  panNumber: panNumberSchema,
   photo: yup.string().url().optional(),
   photoPublicId: yup.string().optional(),
   aadharCardFront: yup.string().url().optional(),
@@ -120,7 +128,7 @@ export const updateGuardSchema = yup.object({
   gender: yup.string().oneOf(["Male", "Female", "Other"]).optional(),
   contactNumber: yup.string().optional(),
   alternateContactNumber: yup.string().optional(),
-  email: yup.string().email("Must be a valid email").optional(),
+  email: emailSchema,
   presentAddress: yup.string().optional(),
   permanentAddress: yup.string().optional(),
   bankName: yup.string().optional(),
@@ -135,11 +143,7 @@ export const updateGuardSchema = yup.object({
       "Aadhaar must be 12 digits"
     )
     .optional(),
-  panNumber: yup
-    .string()
-    .transform((val) => (val === "" ? undefined : val))
-    .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i, "Invalid PAN format")
-    .optional(),
+  panNumber: panNumberSchema,
   photo: yup.string().url().optional(),
   photoPublicId: yup.string().optional(),
   aadharCardFront: yup.string().url().optional(),

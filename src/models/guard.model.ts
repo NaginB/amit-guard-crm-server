@@ -25,8 +25,11 @@ const guardSchema = new Schema<IGuard>(
       type: String,
       trim: true,
       lowercase: true,
+      required: false,
       unique: true,
       sparse: true,
+      set: (value: string | null | undefined) =>
+        value == null || value === "" ? undefined : value,
     },
     presentAddress: { type: String, trim: true },
     permanentAddress: { type: String, trim: true },
@@ -48,7 +51,16 @@ const guardSchema = new Schema<IGuard>(
 
     // KYC Documents
     aadharNumber: { type: String, trim: true, unique: true, sparse: true },
-    panNumber: { type: String, trim: true, unique: true, sparse: true },
+    panNumber: {
+      type: String,
+      trim: true,
+      uppercase: true,
+      required: false,
+      unique: true,
+      sparse: true,
+      set: (value: string | null | undefined) =>
+        value == null || value === "" ? undefined : value,
+    },
     photo: { type: String },
     photoPublicId: { type: String, trim: true },
     aadharCardFront: { type: String },
@@ -76,7 +88,7 @@ const guardSchema = new Schema<IGuard>(
           phoneNumber: { type: String, trim: true },
           gender: { type: String, enum: ["Male", "Female", "Other"] },
         },
-        { _id: false }
+        { _id: false },
       ),
     ],
 
@@ -90,7 +102,7 @@ const guardSchema = new Schema<IGuard>(
           assignedDate: { type: Date, default: Date.now },
           assignedBy: { type: String, required: true },
         },
-        { _id: false }
+        { _id: false },
       ),
     ],
 
@@ -101,7 +113,7 @@ const guardSchema = new Schema<IGuard>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 guardSchema.index({ isDeleted: 1 });
@@ -110,8 +122,7 @@ guardSchema.index({ contactNumber: 1 });
 
 // Handle guardId auto-increment and password hashing
 guardSchema.pre("save", async function (next) {
-
-  console.log('response: -------')
+  console.log("response: -------");
   // Hash password if it's modified
   if (this.isModified("password") && this.password) {
     this.password = await bcrypt.hash(this.password, 12);
@@ -132,7 +143,7 @@ guardSchema.pre("save", async function (next) {
 // Compare password method
 guardSchema.methods.correctPassword = async function (
   candidatePassword: string,
-  userPassword: string
+  userPassword: string,
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
