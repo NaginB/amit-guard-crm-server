@@ -43,8 +43,8 @@ const guardPayload = yup.object({
   aadharNumber: yup
     .string()
     .matches(
-      /^(\d{16}|\d{4}[ \-]?\d{4}[ \-]?\d{4}[ \-]?\d{4})$/,
-      "Aadhaar must be 16 digits"
+      /^(\d{12}|\d{4}[ \-]?\d{4}[ \-]?\d{4})$/,
+      "Aadhaar must be 12 digits"
     )
     .required("Aadhaar number is required"),
   panNumber: yup
@@ -131,8 +131,8 @@ export const updateGuardSchema = yup.object({
   aadharNumber: yup
     .string()
     .matches(
-      /^(\d{16}|\d{4}[ \-]?\d{4}[ \-]?\d{4}[ \-]?\d{4})$/,
-      "Aadhaar must be 16 digits"
+      /^(\d{12}|\d{4}[ \-]?\d{4}[ \-]?\d{4})$/,
+      "Aadhaar must be 12 digits"
     )
     .optional(),
   panNumber: yup
