@@ -3,6 +3,7 @@ import { IGuard } from "../interfaces/guard.interface";
 import { AppError } from "../utils/AppError";
 import { InventoryService } from "./inventory.service";
 import crypto from "crypto";
+import { decrementSequence } from "../models/counter.model";
 
 const inventoryService = new InventoryService();
 
@@ -237,5 +238,11 @@ export const deleteGuardById = async (id: string): Promise<IGuard | null> => {
 
   // Hard delete - completely remove from database
   await Guard.findByIdAndDelete(id);
+
+  // Keep guard IDs tightly sequenced when the counter can safely move back.
+  if (guard.guardId !== undefined) {
+    await decrementSequence("guardId");
+  }
+
   return guard as IGuard;
 };

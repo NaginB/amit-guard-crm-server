@@ -22,4 +22,17 @@ export async function getNextSequence(name: string): Promise<number> {
   return updated!.seq;
 }
 
+export async function decrementSequence(
+  name: string,
+  amount = 1,
+): Promise<number | null> {
+  const updated = await Counter.findOneAndUpdate(
+    { name, seq: { $gte: amount } },
+    { $inc: { seq: -amount } },
+    { new: true },
+  ).lean();
+
+  return updated?.seq ?? null;
+}
+
 export default Counter;
